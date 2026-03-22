@@ -1,0 +1,490 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap');
+
+/* ── DESIGN TOKENS ─────────────────────────────────────────── */
+:root {
+  --bg-base:       #0a0b0e;
+  --bg-surface:    #111318;
+  --bg-raised:     #181b22;
+  --bg-hover:      #1f2330;
+
+  --border:        #242836;
+  --border-bright: #2e3347;
+
+  --text-primary:  #e8eaf0;
+  --text-secondary:#8891a8;
+  --text-muted:    #515a6e;
+
+  --accent:        #4f7cff;
+  --accent-hover:  #6b91ff;
+  --accent-glow:   rgba(79, 124, 255, 0.18);
+
+  --red:           #ff4757;
+  --red-subtle:    rgba(255, 71, 87, 0.12);
+  --green:         #2ed573;
+  --green-subtle:  rgba(46, 213, 115, 0.12);
+  --amber:         #ffa502;
+
+  --radius-sm:     6px;
+  --radius-md:     12px;
+  --radius-lg:     18px;
+
+  --shadow-sm:     0 2px 8px rgba(0,0,0,0.4);
+  --shadow-md:     0 8px 24px rgba(0,0,0,0.5);
+  --shadow-lg:     0 20px 50px rgba(0,0,0,0.6);
+
+  --font-display:  'Syne', sans-serif;
+  --font-mono:     'Space Mono', monospace;
+}
+
+/* ── RESET ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-display);
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  /* Subtle grid texture */
+  background-image:
+    linear-gradient(rgba(79,124,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79,124,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── SCROLLBAR ──────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ── LAYOUT ─────────────────────────────────────────────────── */
+.app-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+  animation: fadeUp 0.5s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── HEADER ─────────────────────────────────────────────────── */
+.header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+  position: relative;
+  padding: 3rem 1rem;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 50% 0%, rgba(79,124,255,0.12), transparent 70%);
+  pointer-events: none;
+}
+
+.header-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-eyebrow::before,
+.header-eyebrow::after {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+.header h1 {
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #e8eaf0 30%, #8891a8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.75rem;
+}
+
+.header p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ── MAIN GRID ───────────────────────────────────────────────── */
+.main-content {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .main-content { grid-template-columns: 1fr; }
+}
+
+/* ── CARD ────────────────────────────────────────────────────── */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.5;
+}
+
+.card h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ── FORM ────────────────────────────────────────────────────── */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+input[type="text"],
+select,
+textarea,
+input[type="file"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-bright);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  appearance: none;
+}
+
+input[type="text"]::placeholder,
+textarea::placeholder { color: var(--text-muted); }
+
+input[type="text"]:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--bg-hover);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238891a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+select option { background: var(--bg-raised); color: var(--text-primary); }
+
+textarea { resize: vertical; min-height: 90px; }
+
+input[type="file"] {
+  padding: 0.6rem 0.75rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-bright);
+  border-radius: var(--radius-sm);
+  padding: 0.3rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  cursor: pointer;
+  margin-right: 0.75rem;
+  transition: background 0.2s;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+  background: var(--border-bright);
+}
+
+/* ── PRIMARY BUTTON ──────────────────────────────────────────── */
+.btn-primary {
+  width: 100%;
+  background: var(--accent);
+  color: #fff;
+  padding: 0.8rem 1rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(79,124,255,0.35);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── TICKETS SECTION ─────────────────────────────────────────── */
+.tickets-section > h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tickets-count {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.2rem 0.65rem;
+  font-weight: 400;
+}
+
+/* ── TICKET GRID ─────────────────────────────────────────────── */
+.tickets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.25rem;
+}
+
+/* ── TICKET CARD ─────────────────────────────────────────────── */
+.ticket-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  animation: cardIn 0.4s ease both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ticket-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--red);
+  border-radius: 3px 0 0 3px;
+}
+
+.ticket-card.resolved::before {
+  background: var(--green);
+}
+
+.ticket-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.ticket-card.resolved {
+  opacity: 0.65;
+}
+
+.ticket-card.resolved:hover {
+  opacity: 0.9;
+}
+
+/* ── TICKET HEADER ───────────────────────────────────────────── */
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ── BADGES ──────────────────────────────────────────────────── */
+.badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.65rem;
+  border-radius: 4px;
+}
+
+.badge-open {
+  background: var(--red-subtle);
+  color: var(--red);
+  border: 1px solid rgba(255,71,87,0.25);
+}
+
+.badge-resolved {
+  background: var(--green-subtle);
+  color: var(--green);
+  border: 1px solid rgba(46,213,115,0.25);
+}
+
+.category {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+}
+
+/* ── TICKET CONTENT ──────────────────────────────────────────── */
+.ticket-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+.ticket-card .desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  flex-grow: 1;
+}
+
+/* ── TICKET IMAGE ────────────────────────────────────────────── */
+.ticket-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  filter: brightness(0.9);
+  transition: filter 0.2s;
+}
+
+.ticket-card:hover .ticket-image { filter: brightness(1); }
+
+/* ── RESOLVE BUTTON ──────────────────────────────────────────── */
+.btn-resolve {
+  background: transparent;
+  color: var(--green);
+  padding: 0.55rem 0.75rem;
+  border: 1px solid rgba(46,213,115,0.3);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.btn-resolve:hover {
+  background: var(--green-subtle);
+  border-color: var(--green);
+  box-shadow: 0 0 12px rgba(46,213,115,0.2);
+}
+
+/* ── STATES ──────────────────────────────────────────────────── */
+.loading,
+.empty-state {
+  text-align: center;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  padding: 4rem 2rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  letter-spacing: 0.05em;
+}
+
+.loading::before { content: '◌  '; animation: pulse 1.2s ease infinite; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.2; }
+}
+
+/* ── TICKET META ─────────────────────────────────────────────── */
+.ticket-meta {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
