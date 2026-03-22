@@ -1,17 +1,34 @@
 export default function Header({ userEmail, isAdmin, onLogout }) {
+  const initial = userEmail ? userEmail.charAt(0).toUpperCase() : '?';
+
   return (
-    <header className="header" style={{ paddingBottom: '2rem' }}>
-      <div style={{ position: 'absolute', top: '1rem', right: '1rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-          {userEmail} {isAdmin && <strong style={{ color: 'var(--accent)' }}>(Admin)</strong>}
-        </span>
-        <button onClick={onLogout} className="btn-resolve" style={{ borderColor: 'var(--border-bright)', color: 'var(--text-muted)', marginTop: 0 }}>
+    <nav className="navbar">
+      <div className="navbar-brand">
+        <div className="navbar-logo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div>
+          <div className="navbar-title">Campus Tracker</div>
+          <div className="navbar-subtitle">Operations System</div>
+        </div>
+      </div>
+
+      <div className="navbar-right">
+        <div className="navbar-user">
+          <div className="user-avatar">{initial}</div>
+          <div className="user-info">
+            <span className="user-email">{userEmail}</span>
+            <span className={`user-role ${isAdmin ? 'user-role-admin' : 'user-role-student'}`}>
+              {isAdmin ? 'Admin' : 'Student'}
+            </span>
+          </div>
+        </div>
+        <button onClick={onLogout} className="btn-logout">
           Logout
         </button>
       </div>
-      <div className="header-eyebrow">Campus Operations System</div>
-      <h1>🏛️ Campus Tracker</h1>
-      <p>Report and track campus maintenance issues in real-time.</p>
-    </header>
+    </nav>
   );
 }

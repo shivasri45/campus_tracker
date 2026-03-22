@@ -18,8 +18,8 @@ export default function TicketCard({ ticket, index, isAdmin, onResolve, onDelete
       <h3>{ticket.title}</h3>
       
       {(ticket.studentName || ticket.rollNo) && (
-        <p style={{fontSize: '0.8rem', color: 'var(--accent)', marginTop: '-0.5rem', marginBottom: '1rem', fontFamily: 'var(--font-mono)'}}>
-          Reported by: {ticket.studentName} ({ticket.rollNo})
+        <p className="ticket-reporter">
+          👤 {ticket.studentName} ({ticket.rollNo})
         </p>
       )}
 
@@ -32,13 +32,13 @@ export default function TicketCard({ ticket, index, isAdmin, onResolve, onDelete
       <p className="ticket-meta">{formatDate(ticket.createdAt)}</p>
       
       {isAdmin && (
-        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+        <div className="ticket-actions">
           {!isResolved && (
-            <button className="btn-resolve" style={{ flex: 1 }} onClick={() => onResolve(ticket.ticketId)}>
+            <button className="btn-resolve" onClick={() => onResolve(ticket.ticketId)}>
               ✓ RESOLVE
             </button>
           )}
-          <button className="btn-resolve" style={{ flex: 1, borderColor: '#ff4444', color: '#ff4444' }} onClick={() => onDelete(ticket.ticketId)}>
+          <button className="btn-delete" onClick={() => onDelete(ticket.ticketId)}>
             🗑️ DELETE
           </button>
         </div>
