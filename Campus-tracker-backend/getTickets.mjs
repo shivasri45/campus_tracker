@@ -6,15 +6,12 @@ const dynamo = DynamoDBDocumentClient.from(client);
 
 export const handler = async (event) => {
     try {
-        // Create the command to scan (read all items) from the table
         const command = new ScanCommand({
             TableName: "campus-tickets-table" // Your exact table name
         });
 
-        // Fetch data from DynamoDB
         const response = await dynamo.send(command);
 
-        // Return the data to the frontend
         return {
             statusCode: 200,
             headers: { 
@@ -24,7 +21,7 @@ export const handler = async (event) => {
             },
             body: JSON.stringify({
                 message: "Tickets retrieved successfully",
-                tickets: response.Items // This contains the array of tickets
+                tickets: response.Items 
             })
         };
 

@@ -6,7 +6,7 @@ const dynamo = DynamoDBDocumentClient.from(client);
 
 export const handler = async (event) => {
     try {
-        const ticketId = event.pathParameters.ticketId; // Gets ID from the URL
+        const ticketId = event.pathParameters.ticketId; 
         
         await dynamo.send(new DeleteCommand({
             TableName: "campus-tickets-table",

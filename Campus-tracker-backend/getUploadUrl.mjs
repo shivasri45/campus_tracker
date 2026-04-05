@@ -7,21 +7,20 @@ const BUCKET_NAME = "campus-tracker-images-bucket";
 
 export const handler = async (event) => {
     try {
-        // Generate a random file name for the image
         const imageId = crypto.randomUUID();
         const fileName = `${imageId}.jpg`; 
 
-        // Create the command that the frontend will eventually execute
+        
         const command = new PutObjectCommand({
             Bucket: BUCKET_NAME,
             Key: fileName,
-            ContentType: "image/jpeg" // We expect a jpeg image
+            ContentType: "image/jpeg" 
         });
 
-        // Generate the secure URL (expires in 5 minutes / 300 seconds)
+        
         const uploadUrl = await getSignedUrl(s3, command, { expiresIn: 300 });
 
-        // The URL where the image will permanently live after upload
+        
         const imageUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${fileName}`;
 
         return {
@@ -31,8 +30,8 @@ export const handler = async (event) => {
                 "Access-Control-Allow-Origin": "*" 
             },
             body: JSON.stringify({
-                uploadUrl: uploadUrl, // Frontend uses this to upload
-                imageUrl: imageUrl    // Frontend saves this to the database
+                uploadUrl: uploadUrl, 
+                imageUrl: imageUrl    
             })
         };
 
