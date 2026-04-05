@@ -17,12 +17,12 @@ function App() {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Filters State
+
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [filterCategory, setFilterCategory] = useState('ALL');
 
-  // Toast State
+  
   const [toasts, setToasts] = useState([]);
 
   const showToast = useCallback((message, type = 'info') => {
@@ -105,7 +105,7 @@ function App() {
     }
   };
 
-  // --- FILTERING LOGIC ---
+  
   const displayedTickets = tickets.filter(t => {
     const matchesUser = isAdmin ? true : (t.userEmail === userEmail);
     const matchesSearch = t.title.toLowerCase().includes(searchTerm.toLowerCase()) || 

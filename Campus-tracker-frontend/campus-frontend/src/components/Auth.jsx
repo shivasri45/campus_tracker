@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { AuthenticationDetails, CognitoUser, CognitoUserAttribute } from 'amazon-cognito-identity-js';
 import { userPool } from '../cognito';
 
-// Defined OUTSIDE Auth to avoid re-creation on every render (which causes focus loss)
 function BrandHeader() {
   return (
     <div className="auth-brand">
@@ -252,7 +251,6 @@ export default function Auth({ authView, setAuthView, onLoginSuccess }) {
     );
   }
 
-  // LOGIN SCREEN (Default)
   return (
     <div className="auth-container">
       <div className="auth-card">
