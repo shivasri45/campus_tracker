@@ -26,17 +26,23 @@ export default function TicketCard({ ticket, index, isAdmin, onResolve, onDelete
 
       <p className="desc">{ticket.description}</p>
 
-      {/* Original issue image — visible to everyone */}
+            {/* Original issue image — visible to everyone */}
       {ticket.imageUrl && (
-        <img src={ticket.imageUrl} alt="Issue evidence" className="ticket-image" />
+        <div className="image-container">
+          {/* Only show 'Before' if there's an 'After' image, otherwise it's just the issue */}
+          {ticket.resolvedImageUrl && <div className="image-label">Before</div>}
+          <img src={ticket.imageUrl} alt="Issue evidence" className="ticket-image" />
+        </div>
       )}
 
-      {/* Deletion notice — visible to student */}
+      {/* Deletion notice */}
       {isDeleted && (
         <div className="deletion-notice">
           <span className="deletion-notice-icon">⚠️</span>
           <div>
-            <p className="deletion-notice-title">Your ticket was removed by the admin.</p>
+            <p className="deletion-notice-title">
+              {isAdmin ? "You removed this ticket." : "Your ticket was removed by the admin."}
+            </p>
             {ticket.deletionReason && (
               <p className="deletion-notice-reason">Reason: {ticket.deletionReason}</p>
             )}
@@ -48,7 +54,10 @@ export default function TicketCard({ ticket, index, isAdmin, onResolve, onDelete
       {isResolved && (ticket.resolvedImageUrl || ticket.adminComments) && (
         <div className="resolved-details">
           {ticket.resolvedImageUrl && (
-            <img src={ticket.resolvedImageUrl} alt="Resolution evidence" className="ticket-image resolved-image" />
+            <div className="image-container">
+              <div className="image-label success">After</div>
+              <img src={ticket.resolvedImageUrl} alt="Resolution evidence" className="ticket-image resolved-image" />
+            </div>
           )}
           {ticket.adminComments && (
             <p className="admin-comments">
