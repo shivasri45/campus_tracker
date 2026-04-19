@@ -6,6 +6,8 @@ import Auth from './components/Auth';
 import Header from './components/Header';
 import TicketForm from './components/TicketForm';
 import TicketCard from './components/TicketCard';
+import DeleteModal from './components/DeleteModal';
+import ResolveModal from './components/ResolveModal';
 
 const API_BASE_URL = "https://de9200onbi.execute-api.ap-south-1.amazonaws.com"; 
 
@@ -16,6 +18,10 @@ function App() {
   
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Modal state
+  const [deleteModal, setDeleteModal] = useState({ open: false, ticketId: null });
+  const [resolveModal, setResolveModal] = useState({ open: false, ticketId: null });
 
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -78,12 +84,18 @@ function App() {
     }
   };
 
-  const handleResolve = async (ticketId) => {
+  const handleResolve = (ticketId) => {
+    setResolveModal({ open: true, ticketId });
+  };
+
+  const confirmResolve = async ({ resolvedImageUrl, adminComments }) => {
+    const { ticketId } = resolveModal;
+    setResolveModal({ open: false, ticketId: null });
     try {
       await fetch(`${API_BASE_URL}/tickets/${ticketId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: 'RESOLVED' }),
+        body: JSON.stringify({ status: 'RESOLVED', resolvedImageUrl, adminComments }),
       });
       showToast('Ticket marked as resolved', 'success');
       fetchTickets();
@@ -93,11 +105,20 @@ function App() {
     }
   };
 
-  const handleDelete = async (ticketId) => {
-    if (!window.confirm("Are you sure you want to delete this ticket?")) return;
+  const handleDelete = (ticketId) => {
+    setDeleteModal({ open: true, ticketId });
+  };
+
+  const confirmDelete = async (reason) => {
+    const { ticketId } = deleteModal;
+    setDeleteModal({ open: false, ticketId: null });
     try {
-      await fetch(`${API_BASE_URL}/tickets/${ticketId}`, { method: 'DELETE' });
-      showToast('Ticket deleted', 'success');
+      await fetch(`${API_BASE_URL}/tickets/${ticketId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason }),
+      });
+      showToast('Ticket deleted — student has been notified', 'success');
       fetchTickets();
     } catch (err) {
       showToast('Failed to delete ticket', 'error');
@@ -172,6 +193,7 @@ function App() {
                 <option value="ALL">All Statuses</option>
                 <option value="OPEN">Open</option>
                 <option value="RESOLVED">Resolved</option>
+                <option value="DELETED">Deleted</option>
               </select>
               <select className="filter-select" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
                 <option value="ALL">All Categories</option>
@@ -195,6 +217,21 @@ function App() {
           )}
         </section>
       </main>
+
+      {deleteModal.open && (
+        <DeleteModal
+          onConfirm={confirmDelete}
+          onCancel={() => setDeleteModal({ open: false, ticketId: null })}
+        />
+      )}
+
+      {resolveModal.open && (
+        <ResolveModal
+          apiUrl={API_BASE_URL}
+          onConfirm={confirmResolve}
+          onCancel={() => setResolveModal({ open: false, ticketId: null })}
+        />
+      )}
     </div>
   );
 }
