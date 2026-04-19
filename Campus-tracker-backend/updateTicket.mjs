@@ -12,22 +12,36 @@ export const handler = async (event) => {
         
         const body = JSON.parse(event.body);
         const newStatus = body.status; // e.g., "RESOLVED"
+        const resolvedImageUrl = body.resolvedImageUrl || null;
+        const adminComments = body.adminComments || null;
 
-    
+        let updateExpression = "set #status = :s";
+        const expressionAttributeNames = { "#status": "status" };
+        const expressionAttributeValues = { ":s": newStatus };
+
+        if (resolvedImageUrl !== null) {
+            updateExpression += ", resolvedImageUrl = :ri";
+            expressionAttributeValues[":ri"] = resolvedImageUrl;
+        }
+
+        if (adminComments !== null) {
+            updateExpression += ", adminComments = :ac";
+            expressionAttributeValues[":ac"] = adminComments;
+        }
+
+        if (newStatus === "RESOLVED") {
+            updateExpression += ", resolvedAt = :ra";
+            expressionAttributeValues[":ra"] = new Date().toISOString();
+        }
+
         const command = new UpdateCommand({
             TableName: "campus-tickets-table",
             Key: {
                 ticketId: ticketId 
             },
-            
-            UpdateExpression: "set #status = :s",
-            ExpressionAttributeNames: {
-                "#status": "status" 
-            },
-            ExpressionAttributeValues: {
-                ":s": newStatus
-            },
-            
+            UpdateExpression: updateExpression,
+            ExpressionAttributeNames: expressionAttributeNames,
+            ExpressionAttributeValues: expressionAttributeValues,
             ReturnValues: "ALL_NEW" 
         });
 
